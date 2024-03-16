@@ -17,15 +17,18 @@ namespace Example.BasicMovement
 
         private int                _lastInputFrame;
         private BasicInput         _accumulatedInput;
-        private Vector2Accumulator _lookRotationAccumulator = new Vector2Accumulator(0.02f, true);
+        private Vector2Accumulator _lookRotationAccumulator = new(0.02f, true);
 
 		
         private Animator _animator;
         private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
         private static readonly int FreeFallHash = Animator.StringToHash("FreeFall");
+
 		
         public override void Spawned()
         {
+            
+            _animator = GetComponentInChildren<Animator>(true);
             if (HasInputAuthority == true)
             {
                 // Register input polling for local player.
@@ -35,7 +38,6 @@ namespace Example.BasicMovement
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
 				
-                _animator = GetComponentInChildren<Animator>(true);
             }
 			
         }
@@ -48,8 +50,11 @@ namespace Example.BasicMovement
 
         public override void FixedUpdateNetwork()
         {
+            
+            
             if (GetInput(out BasicInput input) == true)
             {
+                
                 // Processing input every tick.
                 // This code path is executed on InputAuthority and StateAuthority.
 
@@ -60,7 +65,9 @@ namespace Example.BasicMovement
                 // By default the value is processed by EnvironmentProcessor - which defines base character speed, handles acceleration/friction, gravity and many other features.
                 Vector3 inputDirection = KCC.Data.TransformRotation * new Vector3(input.MoveDirection.x, 0.0f, input.MoveDirection.y);
                 KCC.SetInputDirection(inputDirection);
-
+                
+         
+                
                 if (input.Jump == true && KCC.Data.IsGrounded == true)
                 {
                     // Set world space jump vector. This value is processed later when KCC executes its FixedUpdateNetwork().
@@ -76,24 +83,25 @@ namespace Example.BasicMovement
 
             // Предварительно получаем данные, чтобы избежать многократных обращений
             var kinematicVelocity = KCC.Data.KinematicVelocity;
-            var dynamicVelocity = KCC.Data.DynamicVelocity;
-            bool isGrounded = KCC.Data.IsGrounded;
-
+          
             // Сглаживание скорости и обновление аниматора
             float targetSpeed = kinematicVelocity.magnitude;
             float moveSpeed = Mathf.Lerp(_animator.GetFloat("MoveSpeed"), targetSpeed, Time.deltaTime * 10f);
+            
+           
+            // Установка состояния на земле и свободного падения
+            _animator.SetBool(IsGroundedHash, KCC.Data.IsGrounded);
+            _animator.SetBool(FreeFallHash, !KCC.Data.IsGrounded && KCC.Data.DynamicVelocity.y < 0);
             _animator.SetFloat("MoveSpeed", moveSpeed);
 
-            // Установка состояния на земле и свободного падения
-            _animator.SetBool(IsGroundedHash, isGrounded);
-            _animator.SetBool(FreeFallHash, !isGrounded && dynamicVelocity.y < 0);
         }
 		
 
         public override void Render()
         {
-            TryAccumulateInput();
-        }
+            
+     
+            TryAccumulateInput();        }
 
         private void LateUpdate()
         {
