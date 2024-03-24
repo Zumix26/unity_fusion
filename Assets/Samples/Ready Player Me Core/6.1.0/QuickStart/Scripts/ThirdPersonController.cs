@@ -40,7 +40,6 @@ namespace ReadyPlayerMe.Samples.QuickStart
             {
                 Init();
             }
-            
             avatar = target;
             thirdPersonMovement.Setup(avatar);
             animator = avatar.GetComponent<Animator>();

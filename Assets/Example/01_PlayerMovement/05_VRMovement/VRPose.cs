@@ -26,7 +26,7 @@ namespace Example.VRMovement
 
 		public static void CheckTrackingOriginMode()
 		{
-			SubsystemManager.GetInstances(_inputSubsystems);
+			SubsystemManager.GetSubsystems(_inputSubsystems);
 
 			for (int i = 0, count = _inputSubsystems.Count; i < count; ++i)
 			{

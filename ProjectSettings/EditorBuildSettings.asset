@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Example/00_Showcase/Showcase.unity
+    path: Assets/Scenes/Showcase.unity
     guid: 55b74c1b02c44de4886ae4d651624926
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: a4797352f371e6d4c970c67418a2ed16, type: 2}
@@ -14,3 +14,4 @@ EditorBuildSettings:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: ec9df76ff07664e408cb1fa756459094, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 8067e0a3499c4b44ab5a819cfe0c9f88, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 30e445f48e96d3343baa2147ef3bcdfb, type: 2}
+  m_UseUCBPForAssetBundles: 0
